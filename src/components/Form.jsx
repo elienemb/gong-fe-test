@@ -1,6 +1,33 @@
 import logo from "../assets/gong-logo.svg";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthSession";   
+import { useState } from "react";
+import { encode } from "../utils/encode.js";
 
 export default function LoginForm() {
+    const goTo = useNavigate();
+    const { setUser } = useAuth();
+    const [error, setError] = useState("");
+
+    const submitLogin = async (event) => {
+        event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        const secret = encode(email, password);
+
+        try {
+            const response = await fetch(`https://gongfetest.firebaseio.com/secrets/${secret}.json`);
+            if (!response.ok) {
+                throw new Error("Invalid email or password");
+            }
+
+            goTo("/hierarchy");
+        } catch (err) {
+            console.error("Login failed:", err);
+            setError("Something went wrong. Please try again.");
+        }
+    }
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -11,7 +38,7 @@ export default function LoginForm() {
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={submitLogin} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -60,6 +87,11 @@ export default function LoginForm() {
               </button>
             </div>
           </form>
+          {error && (
+            <div className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-300">
+              {error}
+            </div>
+          )}
         </div>
       </div>
     </>
