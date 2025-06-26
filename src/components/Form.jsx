@@ -11,20 +11,28 @@ export default function LoginForm() {
 
     const submitLogin = async (event) => {
         event.preventDefault();
-        const email = event.target.email.value;
-        const password = event.target.password.value;
+        const email = event.target.email.value.trim().toLowerCase();
+        const password = event.target.password.value.trim();
         const secret = encode(email, password);
 
         try {
-            const response = await fetch(`https://gongfetest.firebaseio.com/secrets/${secret}.json`);
-            if (!response.ok) {
-                throw new Error("Invalid email or password");
-            }
+          const idRes = await fetch(`https://gongfetest.firebaseio.com/secrets/${secret}.json`); // Fetch user ID based on the encoded secret
+          const userId = await idRes.json();
 
-            goTo("/hierarchy");
-        } catch (err) {
-            console.error("Login failed:", err);
-            setError("Something went wrong. Please try again.");
+          if (!userId) return setError("Invalid credentials"); // If no user ID is found, show an error
+
+          const userRes = await fetch(`https://gongfetest.firebaseio.com/users.json`); // Fetch all users
+          const users = await userRes.json();
+
+          const matchedUser = Object.values(users).find((u) => u.id === userId); // Find the user by ID
+
+          if (!matchedUser) return setError("User data not found");// If no user data is found, show an error
+
+          setUser(matchedUser);
+          goTo("/hierarchy"); // Redirect to the hierarchy page after successful login
+        } catch (err) { // Handle any errors that occur during the fetch
+          console.error("Login failed:", err);
+          setError("Something went wrong. Please try again.");
         }
     }
 
@@ -53,7 +61,7 @@ export default function LoginForm() {
                   type="email"
                   required
                   autoComplete="email"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-[#9069e7] sm:text-sm/6"
                 />
               </div>
             </div>
@@ -74,14 +82,14 @@ export default function LoginForm() {
                   type="password"
                   required
                   autoComplete="current-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-[#9069e7] sm:text-sm/6"
                 />
               </div>
             </div>
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-[#8039df] px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-[#9069e7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9069e7] cursor-pointer"
               >
                 Login
               </button>

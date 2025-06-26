@@ -4,8 +4,9 @@ export const AuthSession = createContext(null);// This creates a context for aut
 
 export function AuthSessionProvider({ children }) {
   const [user, setUser] = useState(null);
+  const logout = () => setUser(null);
   return (
-    <AuthSession.Provider value={{ user, setUser }}>
+    <AuthSession.Provider value={{ user, setUser, logout }}>
       {children} 
     </AuthSession.Provider>
   );
