@@ -2,6 +2,11 @@
 
 This project is a frontend React application for the Gong test.
 
+🌐 Demo
+
+ [Veja a aplicação no ar](https://elienemb.github.io/gong-fe-test/)
+
+
 ## 🛠 Tech Stack
 
 * React (Vite)
@@ -49,11 +54,6 @@ npm run dev
 
 Use the provided test credentials or reinitialize the database via: [https://9y9r481m5w.csb.app](https://9y9r481m5w.csb.app)
 
-## 💡 Notes
 
-* The app does not persist login between refreshes, per test instructions.
-* No external icon libraries are used; only native symbols (e.g. +, -).
 
-## 📤 How to Deploy
 
-Push to your GitHub repo and share the link with evaluators.
