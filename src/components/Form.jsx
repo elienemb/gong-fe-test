@@ -13,7 +13,7 @@ export default function LoginForm() {
         event.preventDefault();
         const email = event.target.email.value.trim().toLowerCase();
         const password = event.target.password.value.trim();
-        const secret = encode(email, password);
+        const secret = encode(email, password);// Encode the email and password to create a secret
 
         try {
           const idRes = await fetch(`https://gongfetest.firebaseio.com/secrets/${secret}.json`); // Fetch user ID based on the encoded secret
@@ -25,6 +25,7 @@ export default function LoginForm() {
           const users = await userRes.json();
 
           const matchedUser = Object.values(users).find((u) => u.id === userId); // Find the user by ID
+          console.log("Matched user:", matchedUser);
 
           if (!matchedUser) return setError("User data not found");// If no user data is found, show an error
 
