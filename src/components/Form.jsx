@@ -24,8 +24,7 @@ export default function LoginForm() {
           const userRes = await fetch(`https://gongfetest.firebaseio.com/users.json`); // Fetch all users
           const users = await userRes.json();
 
-          const matchedUser = Object.values(users).find((u) => u.id === userId); // Find the user by ID
-          console.log("Matched user:", matchedUser);
+          const matchedUser = Object.values(users).find((u) => u.id === userId); // Find the user by ID 
 
           if (!matchedUser) return setError("User data not found");// If no user data is found, show an error
 

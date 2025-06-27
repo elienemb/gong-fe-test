@@ -7,12 +7,12 @@ export default function UserNode({ user }) {
   const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`;// Generate initials from first and last name
 
   return (
-    <div className="ml-4 pl-4">
+    <div className="ml-4">
       <div className="flex items-center gap-3">
         <button
           onClick={() => isManager && setOpen(!open)} // Toggle children visibility
           className={
-            "text-sm w-4 text-center text-gray-600" +
+            "text-sm w-4 text-center text-gray-600 p-4" +
             (isManager ? " cursor-pointer" : " cursor-default")
           }
           aria-label={isManager ? "Toggle children" : "No subordinates"}
